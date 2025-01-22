@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dialog Box Alerts</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f2f5;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+      display: none;
+    }
+
+    .dialog-box {
+      width: 450px;
+      height: 250px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+      z-index: 9999;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .dialog-box.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .success {
+      background-color: #28a745;
+      color: white;
+    }
+    .warning {
+      background-color: #ffc107;
+      color: white;
+    }
+    .error {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .close-btn {
+      background-color: transparent;
+      color: white;
+      border: none;
+      font-size: 20px;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      cursor: pointer;
+    }
+
+    .dialog-content {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="btn btn-success" onclick="showDialog('success', 'Operation was successful!')">Show Success Alert</button>
+  <button class="btn btn-warning" onclick="showDialog('warning', 'This is a warning message!')">Show Warning Alert</button>
+  <button class="btn btn-danger" onclick="showDialog('error', 'An error occurred!')">Show Error Alert</button>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="dialog-box" id="dialog-box">
+    <button class="close-btn" onclick="closeDialog()">X</button>
+    <div class="dialog-content" id="dialog-message"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    function showDialog(type, message) {
+      let icon;
+      let boxClass;
+
+      if (type === 'success') {
+        icon = '✔';
+        boxClass = 'success';
+      } else if (type === 'warning') {
+        icon = '⚠';
+        boxClass = 'warning';
+      } else if (type === 'error') {
+        icon = '❌';
+        boxClass = 'error';
+      }
+
+      $('#dialog-message').html(`
+        <div class="icon ${boxClass}">${icon}</div>
+        <div class="message">${message}</div>
+      `);
+
+      $('#dialog-box').addClass(boxClass).addClass('show');
+      $('#overlay').fadeIn(300);
+
+      setTimeout(function() {
+        $('#dialog-box').addClass('show');
+      }, 10);
+    }
+
+    function closeDialog() {
+      $('#overlay').fadeOut(300);
+      $('#dialog-box').removeClass('show success warning error');
+      $('#dialog-message').html('');
+    }
+  </script>
+
+</body>
+</html>
