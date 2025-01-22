@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .toastbox {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 9999;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .maintoast {
+        display: flex;
+        align-items: center;
+        background-color: #333;
+        color: white;
+        border-radius: 8px;
+        padding: 10px 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        width: 100%;
+        justify-content: space-between;
+        font-size: 16px;
+    }
+
+    .maintoast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .icon {
+        margin-right: 10px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .msg {
+        flex-grow: 1;
+    }
+    .offtoast {
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 0 5px;
+        background-color: transparent;
+        border: none;
+        color: white;
+    }
+    .success {
+        background-color: #28a745;
+    }
+    .warning {
+        background-color: #ffc107;
+    }
+    .error {
+        background-color: #dc3545;
+    }
+</style>    
+<button class="btn btn-success" onclick="showToast('success', 'Operation was successful!')">Show Success Toast</button>
+<button class="btn btn-warning" onclick="showToast('warning', 'This is a warning message!')">Show Warning Toast</button>
+<button class="btn btn-danger" onclick="showToast('error', 'An error occurred!')">Show Error Toast</button>
+<div class="toastbox" id="toast-container"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function showToast(type, message) {
+        const toast = $('<div class="maintoast"></div>');
+        let icon;
+        if (type === 'success') {
+            toast.addClass('success');
+            icon = '✔'; 
+        } else if (type === 'warning') {
+            toast.addClass('warning');
+            icon = '⚠'; 
+        } else if (type === 'error') {
+            toast.addClass('error');
+            icon = '❌'; 
+        }
+        toast.html(`
+        <div class="icon">${icon}</div>
+        <div class="msg">${message}</div>
+        <button class="offtoast" onclick="closeToast(this)">X</button>
+      `);
+        $('#toast-container').append(toast);
+        setTimeout(function () {
+            toast.addClass('show');
+        }, 10); 
+        setTimeout(function () {
+            toast.removeClass('show');
+            setTimeout(function () {
+                toast.remove();
+            }, 500);
+        }, 3000);
+    }
+    function closeToast(button) {
+        const toast = $(button).closest('.maintoast');
+        toast.removeClass('show');
+        setTimeout(function () {
+            toast.remove();
+        }, 500);
+    }
+</script>
+</body>
+</html>
